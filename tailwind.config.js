@@ -12,9 +12,8 @@ export default {
       },
       keyframes: {
         showElement: {
-          "0%": { filter: "brightness(0)" },
-          "50%": { filter: "brightness(0.5)" },
-          "100%": { filter: "brightness(1)" },
+          "0%": { transform: "translateX(-100%)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
         },
       },
     },
