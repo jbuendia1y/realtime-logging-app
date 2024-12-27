@@ -14,15 +14,13 @@ export const SnackbarItem = ({ msg }: Props) => {
   const itemRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const animateEnd = () => {
-      const animation = itemRef.current?.animate(
-        [
-          { filter: "brightness(1)" },
-          { filter: "brightness(0.5)" },
-          { filter: "brightness(0)" },
-        ],
-        { duration: 500, iterations: 1 }
-      );
-      return animation?.finished;
+      if (!itemRef.current) return;
+      itemRef.current.style.transform = "translateX(-100%)";
+      return new Promise((resolve) => {
+        itemRef.current?.addEventListener("transitionend", resolve, {
+          once: true,
+        });
+      });
     };
     const timeoutId = setTimeout(async () => {
       await animateEnd();
@@ -38,7 +36,7 @@ export const SnackbarItem = ({ msg }: Props) => {
     <div
       ref={itemRef}
       className={`
-              flex items-center w-max px-6 py-5 animate-showElement rounded-lg shadow-md ${
+              flex items-center w-max px-6 py-5 transition-transform animate-showElement rounded-lg shadow-md ${
                 msg.variant === "info"
                   ? "bg-blue-600"
                   : msg.variant === "success"
