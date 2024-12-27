@@ -8,10 +8,10 @@ self.addEventListener("install", () => {
       postMessage(dbLog);
       setTimeout(() => {
         postMessage(httpLog);
-      }, faker.number.int({ min: 1, max: 3 }) * 1000);
+      }, randomNumber({ min: 1, max: 3 }) * 1000);
 
       wrapper();
-    }, faker.number.int({ min: 1, max: 3 }) * 1000);
+    }, randomNumber({ min: 1, max: 3 }) * 1000);
   };
   wrapper();
 });

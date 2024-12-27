@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker";
+import { randomArrayItem, randomNumber } from "./basic";
 
 const FAKE_SELECT_STANTMENTS = [
   {
@@ -131,11 +131,11 @@ export const FakeFavoriteUserMoviesTable: FakeSQLTable = {
   generateFakeQuery(queryType) {
     switch (queryType) {
       case "SELECT": {
-        return faker.helpers.arrayElement(FAKE_SELECT_STANTMENTS)?.compute({
+        return randomArrayItem(FAKE_SELECT_STANTMENTS)?.compute({
           tableName: this.name,
           columns: this.columns,
           ...{
-            limit: faker.number.int({ min: 25, max: 100 }).toString(),
+            limit: randomNumber({ min: 25, max: 100 }).toString(),
             filters: {
               timestamp: `> ${new Date().toISOString()}`,
             },
@@ -144,16 +144,16 @@ export const FakeFavoriteUserMoviesTable: FakeSQLTable = {
         });
       }
       case "UPDATE": {
-        return faker.helpers.arrayElement(FAKE_UPDATE_STANTMENTS)?.compute({
+        return randomArrayItem(FAKE_UPDATE_STANTMENTS)?.compute({
           tableName: this.name,
           filters: { id: generateFakeSqlUUID() },
           newValues: {
-            stars: faker.number.int({ min: 1, max: 5 }).toString(10),
+            stars: randomNumber({ min: 1, max: 5 }).toString(10),
           },
         });
       }
       case "INSERT": {
-        return faker.helpers.arrayElement(FAKE_INSERT_STANTMENTS)?.compute({
+        return randomArrayItem(FAKE_INSERT_STANTMENTS)?.compute({
           tableName: this.name,
           columns: this.columns,
           data: {
@@ -161,26 +161,24 @@ export const FakeFavoriteUserMoviesTable: FakeSQLTable = {
             userId: generateFakeSqlUUID(),
             movieId: generateFakeSqlUUID(),
             timestamp: new Date().toISOString(),
-            stars: faker.number.int({ min: 1, max: 5 }).toString(10),
+            stars: randomNumber({ min: 1, max: 5 }).toString(10),
           },
         });
       }
       case "DELETE": {
-        return faker.helpers
-          .arrayElement(
-            FAKE_DELETE_STANTMENTS.filter((v) => v.type.includes("delete"))
-          )
-          ?.compute({
-            tableName: this.name,
-            filters: { id: generateFakeSqlUUID() },
-          });
+        return randomArrayItem(
+          FAKE_DELETE_STANTMENTS.filter((v) => v.type.includes("delete"))
+        )?.compute({
+          tableName: this.name,
+          filters: { id: generateFakeSqlUUID() },
+        });
       }
       default: {
-        return faker.helpers.arrayElement(FAKE_SELECT_STANTMENTS)?.compute({
+        return randomArrayItem(FAKE_SELECT_STANTMENTS)?.compute({
           tableName: this.name,
           columns: this.columns,
           ...{
-            limit: faker.number.int({ min: 25, max: 100 }).toString(),
+            limit: randomNumber({ min: 25, max: 100 }).toString(),
             filters: {
               timestamp: `> ${new Date().toISOString()}`,
             },

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { getFakeRealtimeLogs } from "../services/getFakeRealtimeLogs";
 import { Level, LoggingEvent } from "../model";
-import { faker } from "@faker-js/faker";
 import { generateFakeLogs } from "../services/generateFakeLogs";
+import { randomNumber } from "../../fake-data/basic";
 
 export const useRealtimeLogs = () => {
   const [logs, setLogs] = useState<Array<LoggingEvent>>([]);
@@ -23,7 +23,7 @@ export const useRealtimeLogs = () => {
           generateFakeLogs();
           wrapper();
         }
-      }, faker.number.int({ min: 1, max: 3 }) * 1000);
+      }, randomNumber({ min: 1, max: 3 }) * 1000);
     };
     wrapper();
 

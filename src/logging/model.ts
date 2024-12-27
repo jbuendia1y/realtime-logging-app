@@ -1,5 +1,3 @@
-import { faker } from "@faker-js/faker";
-
 export enum Level {
   DEBUG,
   INFO,
@@ -7,6 +5,8 @@ export enum Level {
   ERROR,
   FATAL,
 }
+
+export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 export const getLogLevelFromString = (key: string): Level | undefined => {
   return LevelInt[parseInt(key)];
@@ -31,7 +31,7 @@ export const LevelStr: Record<Level, string> = {
 export interface HttpLogEventData {
   username: string;
   url: string;
-  action: ReturnType<typeof faker.internet.httpMethod>;
+  action: HttpMethod;
   httpStatus: number;
 }
 

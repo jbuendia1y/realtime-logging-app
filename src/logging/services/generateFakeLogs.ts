@@ -1,9 +1,13 @@
-import { faker } from "@faker-js/faker";
-import { Level, LoggingEvent } from "../model";
+import { HttpMethod, Level, LoggingEvent } from "../model";
 import { FakeFavoriteUserMoviesTable } from "../../fake-data/sql-database";
 import { LOGS_EVENT_ADDED_EVENT_NAME } from "../constants";
-
-type HttpMethod = ReturnType<typeof faker.internet.httpMethod>;
+import {
+  randomApiEndpointUrl,
+  randomHttpStatusCode,
+  randomIpAddress,
+  randomUsername,
+} from "../../fake-data/internet";
+import { randomArrayItem, randomNumber } from "../../fake-data/basic";
 
 const generateDatabaseFakeLog = (
   httpMethod: HttpMethod,
@@ -19,8 +23,7 @@ const generateDatabaseFakeLog = (
         FakeFavoriteUserMoviesTable.name
       : (query.includes("LIMIT")
           ? query.split("LIMIT ")[1].split(" ")[0]
-          : faker.number.int({ min: 25, max: 100 }).toString()) +
-        " Rows fetched";
+          : randomNumber({ min: 25, max: 100 }).toString()) + " Rows fetched";
   } else if (httpMethod === "DELETE") {
     query = FakeFavoriteUserMoviesTable.generateFakeQuery("DELETE");
     response =
@@ -43,33 +46,33 @@ const generateDatabaseFakeLog = (
 
   return {
     type: "DATABASE",
-    data: { clientIp: faker.internet.ip(), response, stantment: query },
+    data: { clientIp: randomIpAddress(), response, stantment: query },
     timestamp: new Date(),
     level: isErrorResponse
-      ? faker.helpers.arrayElement([Level.ERROR, Level.FATAL])
-      : faker.helpers.arrayElement([Level.INFO, Level.DEBUG]),
+      ? randomArrayItem([Level.ERROR, Level.FATAL])
+      : randomArrayItem([Level.INFO, Level.DEBUG]),
   };
 };
 
 const generateHttpFakeLog = (): LoggingEvent => {
-  const httpStatus = faker.internet.httpStatusCode();
-  const username = faker.internet.username();
-  const url = faker.internet.url();
+  const httpStatus = randomHttpStatusCode();
+  const username = randomUsername();
+  const url = randomApiEndpointUrl();
 
-  let httpMethod: HttpMethod = faker.helpers.arrayElement([
+  let httpMethod: HttpMethod = randomArrayItem([
     "GET",
     "POST",
     "PUT",
     "PATCH",
     "DELETE",
   ]);
-  let level: Level = faker.helpers.arrayElement([Level.DEBUG, Level.INFO]);
+  let level: Level = randomArrayItem([Level.DEBUG, Level.INFO]);
   if (httpStatus >= 400 && httpStatus < 500) {
-    level = faker.helpers.arrayElement([Level.ERROR, Level.WARN]);
-    httpMethod = faker.helpers.arrayElement(["POST", "PUT", "PATCH", "DELETE"]);
+    level = randomArrayItem([Level.ERROR, Level.WARN]);
+    httpMethod = randomArrayItem(["POST", "PUT", "PATCH", "DELETE"]);
   } else if (httpStatus >= 500) {
-    level = faker.helpers.arrayElement([Level.ERROR, Level.FATAL]);
-    httpMethod = faker.helpers.arrayElement(["POST", "PUT", "PATCH", "DELETE"]);
+    level = randomArrayItem([Level.ERROR, Level.FATAL]);
+    httpMethod = randomArrayItem(["POST", "PUT", "PATCH", "DELETE"]);
   }
 
   return {
@@ -106,5 +109,5 @@ export const generateFakeLogs = () => {
         detail: httpLog,
       })
     );
-  }, faker.number.int({ min: 1, max: 5 }) * 1000);
+  }, randomNumber({ min: 1, max: 5 }) * 1000);
 };
