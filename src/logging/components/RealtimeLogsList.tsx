@@ -14,7 +14,7 @@ export const RealtimeLogsList = ({
   const hasEnoughData = data.length - maxItems === 0;
 
   const handleClick = async (e: LoggingEvent) => {
-    await navigator.clipboard.writeText(JSON.stringify(e));
+    await navigator.clipboard.writeText(JSON.stringify(e, null, 2));
     show({ message: e.type + " Log copied!", variant: "info", duration: 1 });
   };
 
