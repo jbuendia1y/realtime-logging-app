@@ -1,6 +1,7 @@
 import { LoggingEvent } from "../model";
 import { LabelByLevel } from "./LabelByLevel";
 import { useLoggingStyles } from "../hooks/useLoggingStyles";
+import { JsonLogDetail } from "../../components/JsonLogDetail";
 
 export const Log = ({
   logEvent,
@@ -10,6 +11,7 @@ export const Log = ({
   onClick: (e: LoggingEvent) => Promise<void>;
 }) => {
   const ctx = useLoggingStyles();
+
   return (
     <p
       className="grid grid-cols-log-template cursor-copy"
@@ -25,7 +27,7 @@ export const Log = ({
       </span>
       <span className="inline-block overflow-hidden">
         {ctx.formatJson ? (
-          <pre>{JSON.stringify(logEvent.data)}</pre>
+          <JsonLogDetail logEvent={logEvent} />
         ) : logEvent.type === "HTTP" ? (
           <>
             {logEvent.data.action} {logEvent.data.httpStatus}{" "}
